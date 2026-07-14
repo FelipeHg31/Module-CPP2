@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/02 15:05:55 by juan-her          #+#    #+#             */
-/*   Updated: 2026/07/03 16:32:12 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/07/14 19:39:54 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ const char *Bureaucrat::GradeTooLowException::what() const throw()
 	return ("The grade is too low");
 }
 
-Bureaucrat::Bureaucrat(): _name("none"), _range(0){}
+Bureaucrat::Bureaucrat(): _name("none"), _range(150){}
 
 Bureaucrat::Bureaucrat(const std::string name, int range): _name(name)
 {
@@ -38,12 +38,10 @@ Bureaucrat::Bureaucrat(const std::string name, int range): _name(name)
 		else
 			_range = range;
 	}
-	catch(Bureaucrat::GradeTooHighException&){
-		std::cout << "Error in range, value is higher" << std::endl;
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
 	}
-	catch(Bureaucrat::GradeTooLowException&) {
-		std::cout << "Error in range, value is lower" << std::endl;
-	}	
 }
 
 Bureaucrat::Bureaucrat(const Bureaucrat& other): _name(other._name), _range(other._range){}
@@ -80,9 +78,9 @@ void Bureaucrat::increment(int n)
 		else
 			_range -= n;
 	}
-	catch(Bureaucrat::GradeTooHighException&)
+	catch (const std::exception& e)
 	{
-		std::cout << "Error in increment" << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 }
 
@@ -95,9 +93,9 @@ void Bureaucrat::decrement(int n)
 		else
 			_range += n;
 	}
-	catch(Bureaucrat::GradeTooLowException&)
+	catch (const std::exception& e)
 	{
-		std::cout << "Error in decrement" << std::endl;
+		std::cerr << e.what() << std::endl;
 	}
 }
 

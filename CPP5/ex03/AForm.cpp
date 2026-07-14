@@ -1,31 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Form.cpp                                           :+:      :+:    :+:   */
+/*   AForm.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/03 05:30:49 by juan-her          #+#    #+#             */
-/*   Updated: 2026/07/14 19:39:31 by juan-her         ###   ########.fr       */
+/*   Created: 2026/07/03 19:45:12 by juan-her          #+#    #+#             */
+/*   Updated: 2026/07/14 19:37:25 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Form.hpp"
+#include "AForm.hpp"
 #include "Bureaucrat.hpp"
 
-const char* Form::GradeTooHighException::what() const throw()
+const char* AForm::GradeTooHighException::what() const throw()
 {
 	return ("The grade is too high");
 }
 
-const char* Form::GradeTooLowException::what() const throw()
+const char* AForm::GradeTooLowException::what() const throw()
 {
 	return ("The grade is too low");
 }
 
-Form::Form(): _name("none"), _sign(false), _canSign(150), _canExec(150){}
+const char* AForm::NotSignedException::what() const throw()
+{
+	return ("The form is not signed");
+}
 
-Form::Form(const std::string name, bool sign, int canSign, int canExec):
+const char* AForm::CantExecute::what() const throw()
+{
+	return ("The form cant be execute");
+}
+
+AForm::AForm(): _name("none"), _sign(false), _canSign(150), _canExec(150){}
+
+AForm::AForm(const std::string name, bool sign, int canSign, int canExec):
 	_name(name), _sign(sign), _canSign(canSign), _canExec(canExec)
 {
 	if (canSign > 150 || canExec > 150)
@@ -34,7 +44,7 @@ Form::Form(const std::string name, bool sign, int canSign, int canExec):
 		throw GradeTooHighException();
 }
 
-Form::Form(const Form& other): _name(other._name), _sign(other._sign), _canSign(other._canSign), _canExec(other._canExec)
+AForm::AForm(const AForm& other): _name(other._name), _sign(other._sign), _canSign(other._canSign), _canExec(other._canExec)
 {
 	if (other._canSign > 150 || other._canExec > 150)
 		throw GradeTooLowException();
@@ -42,7 +52,7 @@ Form::Form(const Form& other): _name(other._name), _sign(other._sign), _canSign(
 		throw GradeTooHighException();
 }
 
-Form& Form::operator=(const Form& other)
+AForm& AForm::operator=(const AForm& other)
 {
 	if (this != &other)
 	{
@@ -51,32 +61,32 @@ Form& Form::operator=(const Form& other)
 	return *this;
 }
 
-Form::~Form()
+AForm::~AForm()
 {
-	std::cout << "Form " << _name << " destroyed" << std::endl;
+	std::cout << "AForm " << _name << " destroyed" << std::endl;
 }
 
-std::string const & Form::getName() const
+std::string const & AForm::getName() const
 {
 	return (_name);
 }
 
-int Form::getCanSign() const
+int AForm::getCanSign() const
 {
 	return (_canSign);
 }
 
-int Form::getCanExec() const
+int AForm::getCanExec() const
 {
 	return (_canExec);
 }
 
-bool Form::getSign() const
+bool AForm::getSign() const
 {
 	return (_sign);
 }
 
-bool Form::beSigned(Bureaucrat& b)
+bool AForm::beSigned(const Bureaucrat& b)
 {
 	try
 	{
@@ -100,7 +110,7 @@ bool Form::beSigned(Bureaucrat& b)
 	return (false);
 }
 
-std::ostream& operator <<(std::ostream& out, const Form& obj)
+std::ostream& operator <<(std::ostream& out, const AForm& obj)
 {
 	std::string is;
 	if (obj.getSign())
