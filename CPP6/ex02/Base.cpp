@@ -6,15 +6,11 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/23 02:14:47 by juan-her          #+#    #+#             */
-/*   Updated: 2026/07/23 04:04:07 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/07/24 20:35:37 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Base.hpp"
-#include <cstdlib>
-#include <ctime>
-
-#include <iostream>
 
 Base::~Base() {}
 
@@ -22,7 +18,6 @@ Base *generate(void)
 {
 	int pos;
 
-	std::srand(std::time(0));
 	pos = std::rand() % 10;
 
 	if (pos % 3 == 0)
@@ -51,26 +46,28 @@ void identify(Base* p)
 		std::cout << "This is the class C" << std::endl;
 		return ;
 	}
+	std::cout << "This is not a class" << std::endl;
 }
 
 void identify(Base& p)
 {
-	try
-	{
+	try {
 		dynamic_cast<A&>(p);
-		std::cout << "This is the class A" << std::endl;
-	}
-	catch(...) {}
-	try
-	{
+		std::cout << "A" << std::endl;
+		return;
+	} catch (const std::bad_cast&) {}
+
+	try {
 		dynamic_cast<B&>(p);
-		std::cout << "This is the class B" << std::endl;
-	}
-	catch(...) {}
-	try
-	{
+		std::cout << "B" << std::endl;
+		return;
+	} catch (const std::bad_cast&) {}
+
+	try {
 		dynamic_cast<C&>(p);
-		std::cout << "This is the class C" << std::endl;
-	}
-	catch(...) {}
+		std::cout << "C" << std::endl;
+		return;
+	} catch (const std::bad_cast&) {}
+
+	std::cout << "Unknown" << std::endl;
 }
