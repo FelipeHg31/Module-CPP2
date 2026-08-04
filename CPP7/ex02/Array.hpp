@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ScalarConverter.hpp                                :+:      :+:    :+:   */
+/*   Array.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/14 20:48:42 by juan-her          #+#    #+#             */
-/*   Updated: 2026/08/02 16:12:30 by juan-her         ###   ########.fr       */
+/*   Created: 2026/08/04 14:41:34 by juan-her          #+#    #+#             */
+/*   Updated: 2026/08/04 14:55:13 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
-#include <string>
-#include <cstdlib>
-#include <iostream>
-#include <limits>
-#include <cmath>
-#include <cctype>
-#include <iomanip>
-
-class ScalarConverter
+template <typename T>
+class Array
 {
 	private:
-		ScalarConverter();
-
+		T *_array;
+		unsigned int _size;
 	public:
-		static void convert(const std::string& literal);
+		Array();
+		Array(unsigned int size);
+		Array(const Array& other);
+		Array& operator=(const Array &other);
+		~Array();
+
+		T& operator[](unsigned int index);
+		const T& operator[](unsigned int index) const;
+		unsigned int size() const;
 };
+
+#include "Array.tpp"

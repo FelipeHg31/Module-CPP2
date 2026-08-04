@@ -6,17 +6,11 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/14 20:48:44 by juan-her          #+#    #+#             */
-/*   Updated: 2026/07/16 20:32:10 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/08/02 16:06:51 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ScalarConverter.hpp"
-#include <cstdlib>
-#include <iostream>
-#include <limits>
-#include <cmath>
-#include <cctype>
-#include <iomanip>
 
 ScalarConverter::ScalarConverter() {}
 
