@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 23:48:43 by juan-her          #+#    #+#             */
-/*   Updated: 2026/10/05 09:44:07 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/10/05 12:00:58 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,12 @@ static int Parse_Number(const std::string& num)
 	if (num.size() > 10)
 		throw(BadFormat());
 	n = std::strtol(num.c_str(), NULL, 10);
-	if (n > INT_MAX)
+	if (n > INT_MAX || n < 0)
 		throw(BadFormat());
 	return (static_cast<int>(n));
 }
 
-static void insert_Number(const std::string& line, std::vector<int>* vec, std::deque<int>* deq)
+static void insert_Number(const std::string& line, std::vector<int>& vec, std::deque<int>& deq)
 {
 	std::stringstream ss(line);
 	std::string token;
@@ -42,8 +42,8 @@ static void insert_Number(const std::string& line, std::vector<int>* vec, std::d
 	while (ss >> token)
 	{
 		num = Parse_Number(token);
-		vec->push_back(num);
-		deq->push_back(num);
+		vec.push_back(num);
+		deq.push_back(num);
 	}
 }
 
@@ -70,10 +70,12 @@ int main(int ac, char **ag)
 		std::cerr << "Error: no input" << std::endl;
 		return (1);
 	}
+	if (!ag[1][0])
+		return(1);
 	try
 	{
 		for (int i = 1; i < ac; i++)
-			insert_Number(ag[i], &vec, &deq);
+			insert_Number(ag[i], vec, deq);
 	}
 	catch (const std::exception& e)
 	{

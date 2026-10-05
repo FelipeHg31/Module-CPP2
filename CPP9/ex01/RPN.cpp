@@ -1,56 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Oper.cpp                                           :+:      :+:    :+:   */
+/*   RPN.cpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/09/11 21:38:02 by juan-her          #+#    #+#             */
-/*   Updated: 2026/10/05 09:40:57 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/10/05 10:51:17 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Oper.hpp"
+#include "RPN.hpp"
 #include <iostream>
 #include <stdlib.h>
 #include <cctype>
 
-Oper::Oper(){}
+RPN::RPN(){}
 
-Oper::Oper(std::string line): _line(line){}
+RPN::RPN(std::string line): _line(line){}
 
-Oper::Oper(const Oper &other): _line(other._line)
+RPN::RPN(const RPN &other): _line(other._line)
 {
-	std::vector<float>::const_iterator it ;
-	it = other._stck.begin();
-	for (; it != other._stck.end(); ++it)
-		_stck.push_back(*it);
+	_stck = other._stck;
 }
 
-Oper& Oper::operator=(const Oper& other)
+RPN& RPN::operator=(const RPN& other)
 {
 	if (this != &other)
 	{
-		if (_stck.size() > 0)
-			_stck.clear();
-		std::vector<float>::const_iterator it ;
-		it = other._stck.begin();
-		for (; it != other._stck.end(); ++it)
-			_stck.push_back(*it);
+		_stck = other._stck;
+		_line = other._line;
 	}
 	return (*this);
 }
 
-Oper::~Oper(){}
+RPN::~RPN(){}
 
-static bool is_operator(char c)
+static bool is_RPNator(char c)
 {
 	if (c != '*' && c != '-' && c != '+' && c != '/')
 		return (false);
 	return (true);
 }
 
-float Oper::operation(float n1, float n2, char op)
+float RPN::operation(float n1, float n2, char op)
 {
 	switch (op)
 	{
@@ -72,34 +65,39 @@ float Oper::operation(float n1, float n2, char op)
 	return (0);
 }
 
-float Oper::getResult()
+float RPN::getResult()
 {
+	while (!_stck.empty())
+		_stck.pop();
 	for (size_t i = 0; i < _line.size(); i++)
 	{
 		if (_line[i] == ' ')
 			continue;
-		if (isdigit(_line[i]))
-			_stck.push_back(_line[i] - '0');
-		else if (is_operator(_line[i]))
+		if (isdigit(static_cast<unsigned char>(_line[i])))
+			_stck.push(_line[i] - '0');
+		else if (is_RPNator(_line[i]))
 		{
 			float num1, num2;
 			float res;
 			
 			if (_stck.size() < 2)
 				throw(BadFormat());
-			num1 = _stck.back();
-			_stck.pop_back();
-			num2 = _stck.back();
-			_stck.pop_back();
+			num1 = _stck.top();
+			_stck.pop();
+			num2 = _stck.top();
+			_stck.pop();
 			res = operation(num1, num2, _line[i]);
-			_stck.push_back(res);
+			_stck.push(res);
 		}
 		else
 			throw(BadInput());
 	}
-	if (_stck.size() > 1)
+	if (_stck.size() != 1)
 		throw(BadInput());
-	return (_stck.back());
+	
+	float res = _stck.top();
+	_stck.pop();
+	return (res);
 }
 
 

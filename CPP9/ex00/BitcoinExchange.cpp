@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 22:24:39 by juan-her          #+#    #+#             */
-/*   Updated: 2026/10/01 22:24:42 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/10/05 09:58:28 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static bool is_digits(const std::string &str)
 	return (true);
 }
 
-// Solo acepta [+-]digitos[.digitos]: rechaza nan, inf, hex, 1e5...
 static bool parse_num(const std::string &str, double *out)
 {
 	size_t i = 0;

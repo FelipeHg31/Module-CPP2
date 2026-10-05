@@ -63,7 +63,6 @@ int main()
 	lst.push_back(737);
 	mstack.push(0);
 	lst.push_back(0);
-	
 	std::cout << "forward:  " << (compare_forward(mstack, lst) ? "OK" : "KO") << std::endl;
 	std::cout << "reverse:  " << (compare_reverse(mstack, lst) ? "OK" : "KO") << std::endl;
 	return (0);
