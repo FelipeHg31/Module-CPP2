@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 22:23:15 by juan-her          #+#    #+#             */
-/*   Updated: 2026/10/05 09:47:17 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/10/07 14:32:57 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 #include <string>
 #include <fstream>
 #include <iostream>
-#include <vector>
 #include <exception>
 
 class BitcoinExchange
@@ -42,7 +41,7 @@ class BitcoinExchange
 		void save_data(std::string& str);
 		bool check_date(std::string& date);
 		bool check_value(double num);
-		void printLine(double res, int opc, std::vector<std::string> vec);
+		void printLine(double res, int opc, std::string date, std::string value);
 		void checkLine(std::string line);
 	public:
 		BitcoinExchange();

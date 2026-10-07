@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 22:24:39 by juan-her          #+#    #+#             */
-/*   Updated: 2026/10/05 09:58:28 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/10/07 15:22:21 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ void BitcoinExchange::save_bd()
 {
 	std::ifstream fd("data.csv");
 	std::string str;
+	size_t first;
 
 	if (!fd.is_open())
 	{
@@ -179,6 +180,9 @@ void BitcoinExchange::save_bd()
 		throw(ErrorBd());
 	}
 	std::getline(fd, str);
+	first = str.find_first_not_of(" \t");
+	if (std::isdigit(static_cast<unsigned char>(str[first])))
+		save_data(str);
 	while (std::getline(fd, str))
 	{
 		if (str.empty())
@@ -192,7 +196,8 @@ void BitcoinExchange::save_bd()
 
 void BitcoinExchange::checkLine(std::string line)
 {
-	std::vector<std::string> vec;
+	std::string date;
+	std::string value;
 	std::map<std::string, double>::iterator it;
 	double num;
 	size_t pos;
@@ -202,51 +207,50 @@ void BitcoinExchange::checkLine(std::string line)
 	pos = line.find('|');
 	if (pos == std::string::npos)
 	{
-		vec.push_back(line);
-		printLine(0, 2, vec);
+		printLine(0, 2, line, "");
 		return ;
 	}
-	vec.push_back(line.substr(0, pos));
-	vec.push_back(line.substr(pos + 1));
-	trim(&vec[0]);
-	trim(&vec[1]);
-	if (!check_date(vec[0]))
+	date = line.substr(0, pos);
+	value = line.substr(pos + 1);
+	trim(&date);
+	trim(&value);
+	if (!check_date(date))
 	{
-		printLine(0, 2, vec);
+		printLine(0, 2, date, value);
 		return ;
 	}
-	if (!parse_num(vec[1], &num))
+	if (!parse_num(value, &num))
 	{
-		printLine(0, 1, vec);
+		printLine(0, 1, date, value);
 		return ;
 	}
 	if (!check_value(num))
 		return ;
-	it = _bd.lower_bound(vec[0]);
-	if (it == _bd.end() || it->first != vec[0])
+	it = _bd.lower_bound(date);
+	if (it == _bd.end() || it->first != date)
 	{
 		if (it == _bd.begin())
 		{
-			printLine(0, 2, vec);
+			printLine(0, 2, date, value);
 			return ;
 		}
 		--it;
 	}
-	printLine(num * it->second, 0, vec);
+	printLine(num * it->second, 0, date, value);
 }
 
-void BitcoinExchange::printLine(double res, int opc, std::vector<std::string> vec)
+void BitcoinExchange::printLine(double res, int opc, std::string date, std::string value)
 {
 	switch (opc)
 	{
 	case 0:
-		std::cout << vec[0] + " => " + vec[1] + " = " << res << std::endl;
+		std::cout << date + " => " + value + " = " << res << std::endl;
 		break;
 	case 1:
 		std::cout << "Error: value not a number" << std::endl;
 		break;
 	case 2:
-		std::cout << "Error: bad input => " + vec[0] << std::endl;
+		std::cout << "Error: bad input => " + date << std::endl;
 		break;
 	}
 }
@@ -255,10 +259,14 @@ void BitcoinExchange::readFiles()
 {
 	std::ifstream in(_file.c_str());
 	std::string str;
+	size_t first;
 
 	if (!in.is_open())
 		throw(ErrorFile());
 	std::getline(in, str);
+	first = str.find_first_not_of(" \t");
+	if (std::isdigit(static_cast<unsigned char>(str[first])))
+		checkLine(str);
 	while (std::getline(in, str))
 		checkLine(str);
 	in.close();
