@@ -6,7 +6,7 @@
 /*   By: juan-her <juan-her@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/10/01 22:24:39 by juan-her          #+#    #+#             */
-/*   Updated: 2026/10/07 15:22:21 by juan-her         ###   ########.fr       */
+/*   Updated: 2026/10/07 15:47:24 by juan-her         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,9 +180,12 @@ void BitcoinExchange::save_bd()
 		throw(ErrorBd());
 	}
 	std::getline(fd, str);
-	first = str.find_first_not_of(" \t");
-	if (std::isdigit(static_cast<unsigned char>(str[first])))
-		save_data(str);
+	if (str[0])
+	{
+		first = str.find_first_not_of(" \t\n");
+		if (std::isdigit(static_cast<unsigned char>(str[first])))
+			save_data(str);
+	}
 	while (std::getline(fd, str))
 	{
 		if (str.empty())
@@ -264,9 +267,12 @@ void BitcoinExchange::readFiles()
 	if (!in.is_open())
 		throw(ErrorFile());
 	std::getline(in, str);
-	first = str.find_first_not_of(" \t");
+	if (str[0])
+	{
+	first = str.find_first_not_of(" \t\n");
 	if (std::isdigit(static_cast<unsigned char>(str[first])))
 		checkLine(str);
+	}
 	while (std::getline(in, str))
 		checkLine(str);
 	in.close();
